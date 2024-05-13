@@ -31,6 +31,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <EnableUnitySupport>false</EnableUnitySupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -81,12 +82,13 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;NAVIGATION_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>WIN32;_DEBUG;NAVIGATION_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_WARNINGS;DT_POLYREF64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>false</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DebugInformationFormat>None</DebugInformationFormat>
+      <AdditionalIncludeDirectories>Detour\Include;g3dlite\Include;..\Navigation\Utilities;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -150,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Common.h" />
     <ClInclude Include="DetourCrowd\Include\DetourCrowd.h" />
     <ClInclude Include="DetourCrowd\Include\DetourLocalBoundary.h" />
     <ClInclude Include="DetourCrowd\Include\DetourObstacleAvoidance.h" />
@@ -167,10 +170,18 @@
     <ClInclude Include="Detour\Include\DetourNavMeshQuery.h" />
     <ClInclude Include="Detour\Include\DetourNode.h" />
     <ClInclude Include="Detour\Include\DetourStatus.h" />
+    <ClInclude Include="File.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Mapper.h" />
+    <ClInclude Include="MapSharedData.h" />
+    <ClInclude Include="NavigationManager.h" />
+    <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Utilities\Platform\CompilerDefs.h" />
+    <ClInclude Include="Utilities\UnorderedMapSet.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Common.cpp" />
     <ClCompile Include="DetourCrowd\Source\DetourCrowd.cpp" />
     <ClCompile Include="DetourCrowd\Source\DetourLocalBoundary.cpp" />
     <ClCompile Include="DetourCrowd\Source\DetourObstacleAvoidance.cpp" />
@@ -187,6 +198,10 @@
     <ClCompile Include="Detour\Source\DetourNavMeshQuery.cpp" />
     <ClCompile Include="Detour\Source\DetourNode.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="File.cpp" />
+    <ClCompile Include="Mapper.cpp" />
+    <ClCompile Include="NavigationManager.cpp" />
+    <ClCompile Include="Pathfinder.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

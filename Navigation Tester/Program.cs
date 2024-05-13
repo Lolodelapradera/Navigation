@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Navigation_Tester.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,9 @@ namespace Navigation_Tester
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Testing");
+            Console.WriteLine("App started");
+            Loader.Load();
+            Console.WriteLine("App Completed");
             Console.Read();
         }
     }
