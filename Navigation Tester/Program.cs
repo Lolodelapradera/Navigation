@@ -10,6 +10,8 @@ namespace Navigation_Tester
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Testing");
+            Console.Read();
         }
     }
 }
