@@ -133,7 +133,7 @@ bool Mapper::loadMap(unsigned int mapId, int x, int y)
 {
 	loadMapData(mapId);
 
-		MMapData* mmap = loadedMMaps[mapId];
+	MMapData* mmap = loadedMMaps[mapId];
 
 	unsigned int packedGridPos = packTileID(x, y);
 	if (mmap->mmapLoadedTiles.find(packedGridPos) != mmap->mmapLoadedTiles.end())

@@ -9,7 +9,7 @@ PathFinder::PathFinder(unsigned int mapId, unsigned int instanceId) :
 {
 
 	Mapper* Map = MapperHandle::MapHandle();
-	
+    std::cout << InstanceId << std::endl;
 	navMesh = Map->GetNavMesh(mapId);
 	navMeshQuery = Map->GetNavMeshQuery(mapId, InstanceId);
   
@@ -93,13 +93,14 @@ bool PathFinder::calculate(float originX, float originY, float originZ, float de
 
 bool PathFinder::BuildPath(Vector3 Start, Vector3 End)
 {
-    float* startPoint = Start.ToRecast().ToFloatPointer();
-    std::cout << startPoint[0] << std::endl;
-    float* endPoint = End.ToRecast().ToFloatPointer();
-    std::cout << endPoint[0] << std::endl;
+    float* startPoint = Start.ToRecast().ToFloatArray().data();
+    std::cout << startPoint[0] << " " << startPoint[1] << " " << startPoint[2] << std::endl;
+    float* endPoint = End.ToRecast().ToFloatArray().data();
+    std::cout << endPoint[0] << " " << endPoint[1] << " " << endPoint[2] << std::endl;
 
     float extents[VERTEX_SIZE] = { 3.0f, 5.0f, 3.0f };
 
+    
     dtPolyRef startPoly;
     dtPolyRef endPoly;
 
@@ -141,7 +142,8 @@ bool PathFinder::BuildPath(Vector3 Start, Vector3 End)
     pathPoints.resize(pathPointCount);
     for (int i = 0; i < pathPointCount; ++i)
     {
-        std::cout << pathPolyRefs[i * VERTEX_SIZE] << std::endl;
+        std::cout << pathPolyRefs[i * VERTEX_SIZE] << " " << pathPolyRefs[i * VERTEX_SIZE + 1] 
+            << " " << pathPolyRefs[i * VERTEX_SIZE + 2] << std::endl;
         pathPoints[i] = Vector3(pathPolyRefs[i * VERTEX_SIZE], pathPolyRefs[i * VERTEX_SIZE + 1], pathPolyRefs[i * VERTEX_SIZE + 2]);
     }
 

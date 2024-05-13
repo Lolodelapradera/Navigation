@@ -47,7 +47,6 @@ std::array<float, 3> Vector3::ToFloatArray() const
 
 float* Vector3::ToFloatPointer() const
 {
-	// Allocate memory for a float array to store x, y, and z
 	float* floatArray = new float[3];
 	floatArray[0] = X;
 	floatArray[1] = Y;
