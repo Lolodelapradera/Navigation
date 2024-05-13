@@ -5,29 +5,16 @@
 #include <iostream>
 #include "DetourNavMesh.h"
 #include "DetourNavMeshQuery.h"
-#include "Utilities/UnorderedMapSet.h"
 
 
-/**
- * @brief Custom memory allocation function.
- *
- * @param size The size of the memory block to allocate.
- * @param hint Allocation hint (ignored in this implementation).
- * @return A pointer to the allocated memory block.
- */
-inline void* dtCustomAlloc(int size, dtAllocFunc /*hint*/)
+inline void* dtCustomAlloc(size_t size, dtAllocHint /*hint*/)
 {
 	return (void*)new unsigned char[size];
 }
 
-/**
- * @brief Custom memory deallocation function.
- *
- * @param ptr A pointer to the memory block to be freed.
- */
 inline void dtCustomFree(void* ptr)
 {
-    delete[] (unsigned char*)ptr;
+	delete[](unsigned char*)ptr;
 }
 
 typedef std::unordered_map<unsigned int, dtTileRef> MMapTileSet;
@@ -100,6 +87,9 @@ public:
 	 * @return True if the map was successfully loaded, false otherwise.
 	 */
 	bool loadMap(unsigned int mapId, int x, int y);
+
+	dtNavMeshQuery const* GetNavMeshQuery(unsigned int mapId, unsigned int instanceId);
+	dtNavMesh const* GetNavMesh(unsigned int mapId);
 
 private:
 

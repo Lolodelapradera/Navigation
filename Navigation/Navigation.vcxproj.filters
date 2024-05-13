@@ -28,6 +28,9 @@
     <Filter Include="Common\Header">
       <UniqueIdentifier>{91d515cc-9f36-4091-bc68-714a64d0fe67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Navigation\Enums">
+      <UniqueIdentifier>{2a6ca1b3-36bd-42a0-8b5d-56f56306e08d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -111,6 +114,15 @@
     <ClInclude Include="Utilities\UnorderedMapSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AreaEnums.h">
+      <Filter>Navigation\Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>Common\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Defines.h">
+      <Filter>Common\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -178,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="NavigationManager.cpp">
       <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

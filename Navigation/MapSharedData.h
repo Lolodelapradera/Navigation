@@ -2,25 +2,13 @@
 #define MANGOS_H_MOVE_MAP_SHARED_DEFINES
 
 #include "DetourNavMesh.h"
+#include "Defines.h"
+
+
 
 /**
- * @brief Magic number for identifying MMAP files.
- */
-#define MMAP_MAGIC 0x4d4d4150   // 'MMAP'
-
- /**
-  * @brief Version number of the MMAP format.
-  */
-#define MMAP_VERSION 4
-
-  /**
-   * @brief Size of the grids used in MMAP.
-   */
-#define SIZE_OF_GRIDS 533.33333f
-
-   /**
-    * @brief Header structure for MMAP tiles.
-    */
+* @brief Header structure for MMAP tiles.
+*/
 struct MmapTileHeader
 {
     unsigned int mmapMagic; ///< Magic number identifying MMAP files.
@@ -34,7 +22,7 @@ struct MmapTileHeader
      * Initializes fields with default values.
      */
     MmapTileHeader() : mmapMagic(MMAP_MAGIC), dtVersion(DT_NAVMESH_VERSION),
-        mmapVersion(MMAP_VERSION), size(0), usesLiquids(false) {}//usesLiquids(true) {} //Remove liquid in paths (not 100% with current maps)
+        mmapVersion(MMAP_VERSION), size(0), usesLiquids(false) {} //usesLiquids(true) {} //Remove liquid in paths (not 100% with current maps)
 };
 
 /**

@@ -17,13 +17,19 @@ NavigationManager* NavigationManager::GetInstance()
 
     return s_singletonInstance;
 }
+void NavigationManager::Initialize()
+{
+    dtAllocSetCustom(dtCustomAlloc, dtCustomFree);
+}
+
 
 void NavigationManager::Release()
 {
+
     MapperHandle::MapHandle()->~Mapper();
 }
 
-void NavigationManager::FreePathArr(XYZ* pathArr)
+void NavigationManager::FreePathArr(Vector3* pathArr)
 {
     delete[] pathArr;
 }
@@ -48,8 +54,7 @@ void NavigationManager::InitializeMaps(Mapper* manager, unsigned int mapId)
                 int x = (xTens * 10) + xOnes;
                 int y = (yTens * 10) + yOnes;
 
-                
-
+               
                 std::string mapIdString;
                 if (mapId < 10)
                     mapIdString = "00" + std::to_string(mapId);
@@ -69,6 +74,19 @@ void NavigationManager::InitializeMaps(Mapper* manager, unsigned int mapId)
 
 void NavigationManager::LoadMap()
 {
-    auto maphandler = MapperHandle::MapHandle();
+    Mapper* maphandler = MapperHandle::MapHandle();
     InitializeMaps(maphandler, 0);
+    /*InitializeMaps(maphandler, 1);
+    InitializeMaps(maphandler, 530);
+    InitializeMaps(maphandler, 571);*/
+}
+
+Vector3* NavigationManager::CalculatePath(unsigned int mapId, Vector3 start, Vector3 end /*,int* length*/)
+{
+    PathFinder pathFinder(mapId, 1);
+
+    pathFinder.calculate(start.X, start.Y, start.Z, end.X, end.Y, end.Z);
+
+
+    return NULL;
 }

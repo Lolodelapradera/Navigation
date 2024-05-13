@@ -1,37 +1,20 @@
 #pragma once
 #include "Mapper.h"
+#include "Common.h"
 #include <vector>
 #include <string>
 
-class XYZ
-{
-public:
-	float X;
-	float Y;
-	float Z;
 
-	XYZ()
-	{
-		X = 0;
-		Y = 0;
-		Z = 0;
-	}
-
-	XYZ(double X, double Y, double Z)
-	{
-		this->X = (float)X;
-		this->Y = (float)Y;
-		this->Z = (float)Z;
-	}
-};
 
 class NavigationManager
 {
 public:
 	static NavigationManager* GetInstance();
+	void Initialize();
 	void LoadMap();
 	void Release();
-	void FreePathArr(XYZ* pathArr);
+	void FreePathArr(Vector3* pathArr);
+	Vector3* CalculatePath(unsigned int mapId, Vector3 start, Vector3 end /*int* length*/);
 
 private:
 
