@@ -15,12 +15,13 @@ public:
 	bool FindPolyPath(Vector3 Start, Vector3 End);
 	bool FindPath(const float* startPoint, const float* endPoint);
 	std::vector<Vector3>& getPath() { return pathPoints; }
+    bool ApplyCircleBlacklistToPolys(int mapId, Vector3 blacklistPoint, float radius);
 
 
 
 private:
 
-	bool ApplyCircleBlacklistToPolys(Vector3 blacklistPoint, float radius);
+	//bool ApplyCircleBlacklistToPolys(int mapId, Vector3 blacklistPoint, float radius);
 	void SetFilters();
 	float searchBoxSize[VERTEX_SIZE] = { 3.0f, 5.0f, 3.0f };
 

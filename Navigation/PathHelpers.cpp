@@ -1,19 +1,25 @@
 #include "Pathfinder.h"
 #include "AreaEnums.h"
 
-bool PathFinder::ApplyCircleBlacklistToPolys(Vector3 blacklistPoint, float radius)
+
+
+bool PathFinder::ApplyCircleBlacklistToPolys(int mapId, Vector3 blacklistPoint, float radius)
 {
+
+	Mapper* Map = MapperHandle::MapHandle();
+	auto navmeshQuery = Map->GetNavMeshQuery(mapId, 1);
+
 	float* searchPoint = blacklistPoint.ToRecast().ToFloatArray().data();
 
-    dtPolyRef CenterPoly;
-    float CenterPolyPoint[3];
-    dtStatus startResult = navMeshQuery->findNearestPoly(searchPoint, PathFinder::searchBoxSize, &Queryfilter, &CenterPoly, CenterPolyPoint);
+	dtPolyRef CenterPoly;
+	float CenterPolyPoint[3];
+	dtStatus startResult = navmeshQuery->findNearestPoly(searchPoint, PathFinder::searchBoxSize, &Queryfilter, &CenterPoly, CenterPolyPoint);
 
 	const int POLY_ARRAY_MAX = 1000;
 	dtPolyRef polyRefsInCircle[POLY_ARRAY_MAX];
 	int polyRefInCircleCount;
 
-	navMeshQuery->findPolysAroundCircle(CenterPoly, searchPoint, radius, &Queryfilter, polyRefsInCircle, NULL, NULL, &polyRefInCircleCount, POLY_ARRAY_MAX);
+	navmeshQuery->findPolysAroundCircle(CenterPoly, searchPoint, radius, &Queryfilter, polyRefsInCircle, NULL, NULL, &polyRefInCircleCount, POLY_ARRAY_MAX);
 
 	for (int i = 0; i < polyRefInCircleCount; i++)
 	{
@@ -33,6 +39,7 @@ bool PathFinder::ApplyCircleBlacklistToPolys(Vector3 blacklistPoint, float radiu
 
 	return false;
 }
+
 
 void PathFinder::SetFilters()
 {
@@ -56,8 +63,10 @@ bool PathFinder::HaveTile(const Vector3& p) const
 	float point[3] = { p.Y, p.Z, p.X };
 
 	navMesh->calcTileLoc(point, &tx, &ty);
+	auto r = navMesh->getTileAt(tx, ty, 0);
+	
 
-	if (navMesh->getTileAt(tx, ty, 0) == NULL)
+	if (r == NULL)
 	{
 		std::cout << "Tile Failed" << std::endl;
 	}

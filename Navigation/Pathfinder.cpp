@@ -12,6 +12,7 @@ PathFinder::PathFinder(unsigned int mapId, unsigned int instanceId) :
 	navMesh = Map->GetNavMesh(mapId);
 
 	navMeshQuery = Map->GetNavMeshQuery(mapId, InstanceId);
+    
   
 	SetFilters();
 
@@ -58,6 +59,8 @@ bool PathFinder::FindPolyPath(Vector3 Start, Vector3 End)
         return false;
     }
 
+
+
     dtStatus dtResult = DT_FAILURE;
     dtResult = navMeshQuery->findPath(
         startPoly,              // start polygon
@@ -82,7 +85,7 @@ bool PathFinder::FindPath(const float* startPoint, const float* endPoint)
 {
     dtStatus dtResult = DT_FAILURE;
     const int PATH_POINT_MAX = 100;
-    float pathPointArray[PATH_POINT_MAX * 3]; // Array to hold x, y, z for each point
+    float pathPointArray[PATH_POINT_MAX * 3]; 
     int pathPointCount;
 
     dtResult = navMeshQuery->findStraightPath(

@@ -15,6 +15,11 @@ extern "C"
     {
         return NavigationManager::GetInstance()->FreePathArr(pathArr);
     }
+
+    __declspec(dllexport) void Blacklist(unsigned int mapid, Vector3 spot, float r)
+    {
+        return NavigationManager::GetInstance()->AddBlacklist(mapid, spot, r);
+    }
 };
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
@@ -25,7 +30,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
     case DLL_PROCESS_ATTACH:
         FileManager::MapPath = FileManager::GetMapPath();
         navigation->Initialize();
-        //navigation->LoadMap();
+        navigation->LoadMap(0);
         break;
 
     case DLL_PROCESS_DETACH:

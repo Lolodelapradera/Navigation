@@ -25,8 +25,11 @@ namespace Navigation_Tester.Common
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void FreePathArr(XYZ* pathArr);
 
-        //private static CalculatePathDelegate calculatePath;
         private static FreePathArr freePathArr;
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void AddBlackListDelegate(uint mapId, XYZ p, float radius);
+        private static AddBlackListDelegate Blacklist;
 
         internal static void Load()
         {
@@ -50,6 +53,18 @@ namespace Navigation_Tester.Common
 
                 freePathArr = Marshal.GetDelegateForFunctionPointer<FreePathArr>(freePathPtr);
             }
+
+            var Blacklistptr = GetProcAddress(navProcPtr, "Blacklist");
+            if (freePathPtr != IntPtr.Zero)
+            {
+
+                Blacklist = Marshal.GetDelegateForFunctionPointer<AddBlackListDelegate>(Blacklistptr);
+            }
+        }
+
+        internal static void AddToBlacklist(uint mapId, Vector3 p, float radius)
+        {
+            Blacklist(mapId, p.ToXYZ(), radius);
         }
 
         internal static Vector3[] CalculatePath(uint mapId, Vector3 start, Vector3 end)
