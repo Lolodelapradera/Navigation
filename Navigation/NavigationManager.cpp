@@ -72,17 +72,15 @@ void NavigationManager::InitializeMaps(Mapper* manager, unsigned int mapId)
     }
 }
 
-void NavigationManager::LoadMap()
+void NavigationManager::LoadMap(unsigned int mapId)
 {
     Mapper* maphandler = MapperHandle::MapHandle();
-    InitializeMaps(maphandler, 0);
-    /*InitializeMaps(maphandler, 1);
-    InitializeMaps(maphandler, 530);
-    InitializeMaps(maphandler, 571);*/
+    InitializeMaps(maphandler, mapId);
 }
 
 Vector3* NavigationManager::CalculatePath(unsigned int mapId, Vector3 start, Vector3 end , int* length)
 {
+    LoadMap(mapId);
     PathFinder pathFinder(mapId, 1);
 
     pathFinder.calculate(start.X, start.Y, start.Z, end.X, end.Y, end.Z);

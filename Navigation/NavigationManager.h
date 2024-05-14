@@ -11,7 +11,7 @@ class NavigationManager
 public:
 	static NavigationManager* GetInstance();
 	void Initialize();
-	void LoadMap();
+	void LoadMap(unsigned int mapId);
 	void Release();
 
 	void FreePathArr(Vector3* pathArr);

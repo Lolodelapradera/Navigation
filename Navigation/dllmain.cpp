@@ -1,14 +1,13 @@
-#include <iostream>
+#include <windows.h>
 #include "File.h"
 #include "NavigationManager.h"
 
-
-NavigationManager* Instance = nullptr;
 
 extern "C"
 {
     __declspec(dllexport) Vector3* CalculatePath(unsigned int mapId, Vector3 start, Vector3 end/*, bool smoothPath*/, int* length)
     {
+
         return NavigationManager::GetInstance()->CalculatePath(mapId, start, end, length);
     }
 
@@ -25,12 +24,18 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
     {
     case DLL_PROCESS_ATTACH:
         FileManager::MapPath = FileManager::GetMapPath();
-        Instance->Initialize();
-        Instance->LoadMap();
+        navigation->Initialize();
+        //navigation->LoadMap();
+        break;
+
+    case DLL_PROCESS_DETACH:
+        navigation->Release();
         break;
 
     case DLL_THREAD_ATTACH:
-        Instance->Release();
+        break;
+
+    case DLL_THREAD_DETACH:
         break;
     }
     return TRUE;

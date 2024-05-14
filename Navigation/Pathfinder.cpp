@@ -10,6 +10,7 @@ PathFinder::PathFinder(unsigned int mapId, unsigned int instanceId) :
 
 	Mapper* Map = MapperHandle::MapHandle();
 	navMesh = Map->GetNavMesh(mapId);
+
 	navMeshQuery = Map->GetNavMeshQuery(mapId, InstanceId);
   
 	SetFilters();

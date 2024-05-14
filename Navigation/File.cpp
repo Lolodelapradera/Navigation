@@ -1,24 +1,30 @@
 #include "File.h"
+#include <iostream>
+using namespace std;
 
+EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 std::string FileManager::GetModulePath()
 {
-    HMODULE hModule = GetModuleHandle(NULL);
-    TCHAR szPath[MAX_PATH];
-    GetModuleFileName(hModule, szPath, MAX_PATH);
-    std::string modulePath = std::string(szPath);
-
-    size_t lastBackslashPos = modulePath.find_last_of("\\");
-    if (lastBackslashPos != std::string::npos) {
-        modulePath = modulePath.substr(0, lastBackslashPos);
+    WCHAR DllPath[MAX_PATH] = { 0 };
+    GetModuleFileNameW((HINSTANCE)&__ImageBase, DllPath, _countof(DllPath));
+    wstring ws(DllPath);
+    string pathAndFile(ws.begin(), ws.end());
+    char* c = const_cast<char*>(pathAndFile.c_str());
+    int strLength = strlen(c);
+    int lastOccur = 0;
+    for (int i = 0; i < strLength; i++)
+    {
+        if (c[i] == '\\') lastOccur = i;
     }
-    modulePath += "\\"; // Corrected this line
+    string ModulePath = pathAndFile.substr(0, lastOccur + 1);
 
-    return modulePath;
+    return ModulePath;
 }
 
 std::string FileManager::GetMapPath()
 {
     std::string ModulePath = GetModulePath();
+   
     ModulePath += "mmaps\\";
 
     // Check if the directory exists

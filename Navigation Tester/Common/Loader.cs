@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Navigation_Tester.Common
 {
@@ -24,10 +20,12 @@ namespace Navigation_Tester.Common
            XYZ end,
            out int length);
 
+        private static CalculatePathDelegate calculatePath;
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate void FreePathArr(XYZ* pathArr);
 
-        private static CalculatePathDelegate calculatePath;
+        //private static CalculatePathDelegate calculatePath;
         private static FreePathArr freePathArr;
 
         internal static void Load()
@@ -37,6 +35,7 @@ namespace Navigation_Tester.Common
             var mapsPath = $"{currentFolder}\\Navigation.dll";
 
             var navProcPtr = LoadLibrary(mapsPath);
+            
 
             var calculatePathPtr = GetProcAddress(navProcPtr, "CalculatePath");
             if (calculatePathPtr != IntPtr.Zero)
