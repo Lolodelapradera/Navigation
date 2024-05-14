@@ -1,6 +1,39 @@
 #include "Pathfinder.h"
 #include "AreaEnums.h"
 
+bool PathFinder::ApplyCircleBlacklistToPolys(Vector3 blacklistPoint, float radius)
+{
+	float* searchPoint = blacklistPoint.ToRecast().ToFloatArray().data();
+
+    dtPolyRef CenterPoly;
+    float CenterPolyPoint[3];
+    dtStatus startResult = navMeshQuery->findNearestPoly(searchPoint, PathFinder::searchBoxSize, &Queryfilter, &CenterPoly, CenterPolyPoint);
+
+	const int POLY_ARRAY_MAX = 1000;
+	dtPolyRef polyRefsInCircle[POLY_ARRAY_MAX];
+	int polyRefInCircleCount;
+
+	navMeshQuery->findPolysAroundCircle(CenterPoly, searchPoint, radius, &Queryfilter, polyRefsInCircle, NULL, NULL, &polyRefInCircleCount, POLY_ARRAY_MAX);
+
+	for (int i = 0; i < polyRefInCircleCount; i++)
+	{
+		dtPolyRef polyRef = polyRefsInCircle[i];
+
+		const dtMeshTile* tile = nullptr;
+		const dtPoly* poly = nullptr;
+
+		dtStatus status = navMesh->getTileAndPolyByRef(polyRef, &tile, &poly);
+
+		if (poly)
+		{
+			// Set the area type to 55
+			((dtPoly*)poly)->setArea(Area::Blacklisted);
+		}
+	}
+
+	return false;
+}
+
 void PathFinder::SetFilters()
 {
 	//Queryfilter.setAreaCost(Area::Walkable, 1);

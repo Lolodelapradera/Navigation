@@ -32,6 +32,7 @@ bool PathFinder::calculate(float originX, float originY, float originZ, float de
     FindPolyPath(startPosition, endPosition);
 }
 
+
 bool PathFinder::FindPolyPath(Vector3 Start, Vector3 End)
 {
     float* startPoint = Start.ToRecast().ToFloatArray().data();
