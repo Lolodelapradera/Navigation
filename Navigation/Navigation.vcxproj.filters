@@ -194,5 +194,8 @@
     <ClCompile Include="Vector3.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="PathHelpers.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

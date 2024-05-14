@@ -5,6 +5,20 @@
 
 NavigationManager* Instance = nullptr;
 
+extern "C"
+{
+    __declspec(dllexport) Vector3* CalculatePath(unsigned int mapId, Vector3 start, Vector3 end/*, bool smoothPath*/, int* length)
+    {
+        return Instance->CalculatePath(mapId, start, end, length);
+    }
+
+    __declspec(dllexport) void FreePathArr(Vector3* pathArr)
+    {
+        return Instance->FreePathArr(pathArr);
+    }
+
+};
+
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
     switch (ul_reason_for_call)
@@ -14,15 +28,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
         Instance->GetInstance();
         Instance->Initialize();
         Instance->LoadMap();
-        
-
-        Instance->CalculatePath(0, Vector3(-8949.95f, -132.493f, 83.5312f), Vector3(-8831.653f, -97.78971f, 84.78954f));
-       
-        
+        break;
 
     case DLL_THREAD_ATTACH:
-    case DLL_THREAD_DETACH:
-    case DLL_PROCESS_DETACH:
+        Instance->Release();
         break;
     }
     return TRUE;

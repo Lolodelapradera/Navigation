@@ -81,12 +81,21 @@ void NavigationManager::LoadMap()
     InitializeMaps(maphandler, 571);*/
 }
 
-Vector3* NavigationManager::CalculatePath(unsigned int mapId, Vector3 start, Vector3 end /*,int* length*/)
+Vector3* NavigationManager::CalculatePath(unsigned int mapId, Vector3 start, Vector3 end , int* length)
 {
     PathFinder pathFinder(mapId, 1);
 
     pathFinder.calculate(start.X, start.Y, start.Z, end.X, end.Y, end.Z);
 
+    std::vector<Vector3> pointPath = pathFinder.getPath();
+    *length = pointPath.size();
 
-    return NULL;
+    Vector3* pathArr = new Vector3[pointPath.size()];
+    for (unsigned int i = 0; i < pointPath.size(); i++)
+    {
+        pathArr[i].X = pointPath[i].X;
+        pathArr[i].Y = pointPath[i].Y;
+        pathArr[i].Z = pointPath[i].Z;
+    }
+    return pathArr;
 }

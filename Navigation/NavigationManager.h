@@ -13,8 +13,10 @@ public:
 	void Initialize();
 	void LoadMap();
 	void Release();
+
 	void FreePathArr(Vector3* pathArr);
-	Vector3* CalculatePath(unsigned int mapId, Vector3 start, Vector3 end /*int* length*/);
+
+	Vector3* CalculatePath(unsigned int mapId, Vector3 start, Vector3 end , int* length);
 
 private:
 

@@ -12,10 +12,10 @@ public:
 
 	PathFinder(unsigned int mapId, unsigned int instanceId);
 	bool calculate(float originX, float originY, float originZ, float destX, float destY, float destZ);
+	bool FindPolyPath(Vector3 Start, Vector3 End);
+	bool FindPath(const float* startPoint, const float* endPoint);
 
-	bool BuildPath(Vector3 Start, Vector3 End);
-
-
+	std::vector<Vector3>& getPath() { return pathPoints; }
 
 
 
@@ -23,10 +23,16 @@ private:
 
 
 	void SetFilters();
+	float searchBoxSize[VERTEX_SIZE] = { 3.0f, 5.0f, 3.0f };
+
+
+
+	dtPolyRef  GetNearestPoly(const float* startPoint) const;
 
 	bool inRangeYZX(const float* v1, const float* v2, float r, float h) const;
 	bool inRange(const Vector3& p1, const Vector3& p2, float r, float h) const;
 	float dist3DSqr(const Vector3& p1, const Vector3& p2) const;
+
 
 
 
