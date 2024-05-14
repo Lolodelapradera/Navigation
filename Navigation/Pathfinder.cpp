@@ -61,16 +61,16 @@ bool PathFinder::inRangeYZX(const float* v1, const float* v2, float r, float h) 
     return (dx * dx + dz * dz) < r * r && fabsf(dy) < h;
 }
 
-//bool PathFinder::inRange(const Vector3& p1, const Vector3& p2, float r, float h) const
-//{
-//    Vector3 d = p1 - p2;
-//    return (d.x * d.x + d.y * d.y) < r * r && fabsf(d.z) < h;
-//}
+bool PathFinder::inRange(const Vector3& p1, const Vector3& p2, float r, float h) const
+{
+    Vector3 d = p1 - p2;
+    return (d.X * d.X + d.Y * d.Y) < r * r && fabsf(d.Z) < h;
+}
 //
-//float PathFinder::dist3DSqr(const Vector3& p1, const Vector3& p2) const
-//{
-//    return (p1 - p2).squaredLength();
-//}
+float PathFinder::dist3DSqr(const Vector3& p1, const Vector3& p2) const
+{
+    return (p1 - p2).squaredLength();
+}
 
 #pragma endregion
 

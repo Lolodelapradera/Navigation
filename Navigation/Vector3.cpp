@@ -28,6 +28,11 @@ bool Vector3::Invalid() const
 	return (this->X == 0 && this->Y == 0 && this->Z == 0);
 }
 
+float Vector3::squaredLength() const
+{
+	return X * X + Y * Y + Z * Z;
+}
+
 
 
 Vector3 Vector3::ToRecast()  const
@@ -91,7 +96,8 @@ Vector3 Vector3::operator*(float scalar) {
 	return Vector3(X * scalar, Y * scalar, Z * scalar);
 }
 
-Vector3 Vector3::operator-(const Vector3& other) {
+Vector3 Vector3::operator-(const Vector3& other) const
+{
 	return Vector3(X - other.X, Y - other.Y, Z - other.Z);
 }
 
