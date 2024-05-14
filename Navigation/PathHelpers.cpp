@@ -3,38 +3,31 @@
 
 
 
-bool PathFinder::ApplyCircleBlacklistToPolys(int mapId, Vector3 blacklistPoint, float radius)
+bool PathFinder::ApplyCircleBlacklistToPolys(const dtNavMeshQuery *meshQuery, Vector3 blacklistPoint, float radius)
 {
-
-	Mapper* Map = MapperHandle::MapHandle();
-	auto navmeshQuery = Map->GetNavMeshQuery(mapId, 1);
-
 	float* searchPoint = blacklistPoint.ToRecast().ToFloatArray().data();
 
 	dtPolyRef CenterPoly;
 	float CenterPolyPoint[3];
-	dtStatus startResult = navmeshQuery->findNearestPoly(searchPoint, PathFinder::searchBoxSize, &Queryfilter, &CenterPoly, CenterPolyPoint);
+	dtStatus startResult = meshQuery->findNearestPoly(searchPoint, PathFinder::searchBoxSize, &Queryfilter, &CenterPoly, CenterPolyPoint);
 
 	const int POLY_ARRAY_MAX = 1000;
 	dtPolyRef polyRefsInCircle[POLY_ARRAY_MAX];
 	int polyRefInCircleCount;
 
-	navmeshQuery->findPolysAroundCircle(CenterPoly, searchPoint, radius, &Queryfilter, polyRefsInCircle, NULL, NULL, &polyRefInCircleCount, POLY_ARRAY_MAX);
+	meshQuery->findPolysAroundCircle(CenterPoly, searchPoint, radius, &Queryfilter, polyRefsInCircle, NULL, NULL, &polyRefInCircleCount, POLY_ARRAY_MAX);
+
 
 	for (int i = 0; i < polyRefInCircleCount; i++)
 	{
 		dtPolyRef polyRef = polyRefsInCircle[i];
 
-		const dtMeshTile* tile = nullptr;
-		const dtPoly* poly = nullptr;
+		const dtMeshTile* tile;
+		const dtPoly* poly;
 
-		dtStatus status = navMesh->getTileAndPolyByRef(polyRef, &tile, &poly);
+		navMeshQuery->getAttachedNavMesh()->getTileAndPolyByRefUnsafe(polyRef, &tile, &poly);
 
-		if (poly)
-		{
-			// Set the area type to 55
-			((dtPoly*)poly)->setArea(Area::Blacklisted);
-		}
+		//((dtPoly*)poly)->setArea(55);
 	}
 
 	return false;

@@ -60,6 +60,10 @@ bool PathFinder::FindPolyPath(Vector3 Start, Vector3 End)
     }
 
 
+    // List of all blacklists
+    // mapid blacklistPoint blacklistRadius
+
+    //PathFinder::ApplyCircleBlacklistToPolys(navMeshQuery, Vector3(-8898.23f, -119.838f, 81.83264f), 10);
 
     dtStatus dtResult = DT_FAILURE;
     dtResult = navMeshQuery->findPath(
@@ -76,6 +80,19 @@ bool PathFinder::FindPolyPath(Vector3 Start, Vector3 End)
     {
         std::cout << "Error finding path" << std::endl;
         return false;
+    }
+
+    for (int i = 0; i < polyLength; i++)
+    {
+        dtPolyRef polyR = pathPolyRefs[i];
+
+        const dtMeshTile* tile;
+        const dtPoly* poly;
+
+        navMeshQuery->getAttachedNavMesh()->getTileAndPolyByRefUnsafe(polyR, &tile, &poly);
+        //dtStatus status = navMesh->getTileAndPolyByRef(polyR, &tile, &poly);
+
+        std::cout << "PolyArea: " << static_cast<int>(poly->getArea()) << std::endl;
     }
 
     FindPath(startPoint, endPoint);

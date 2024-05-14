@@ -25,7 +25,7 @@ void NavigationManager::Initialize()
 void NavigationManager::AddBlacklist(int mapid, Vector3 p, float r)
 {
     PathFinder pathFinder(0, 1);
-    pathFinder.ApplyCircleBlacklistToPolys(mapid, p,r);
+    //pathFinder.ApplyCircleBlacklistToPolys(mapid, p,r);
 }
 
 
