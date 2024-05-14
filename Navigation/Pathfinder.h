@@ -26,6 +26,7 @@ private:
 
 	bool inRangeYZX(const float* v1, const float* v2, float r, float h) const;
 	bool inRange(const Vector3& p1, const Vector3& p2, float r, float h) const;
+	float dist3DSqr(const Vector3& p1, const Vector3& p2) const;
 
 
 

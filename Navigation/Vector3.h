@@ -23,9 +23,10 @@ public:
 	Vector3 operator-(Vector3& other);
 	Vector3& operator=(const Vector3& v);
 	Vector3 operator*(float scalar);
-	Vector3 operator-(const Vector3& other);
+	Vector3 operator-(const Vector3& other) const;
 	// Custom addition operator
 	Vector3 operator+(const Vector3& other);
 	Vector3 Normalize() const;
 	Vector3 Normalize(Vector3 const& v) const;
+	float squaredLength() const;
 };
