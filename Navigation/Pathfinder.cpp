@@ -98,53 +98,67 @@ bool PathFinder::BuildPath(Vector3 Start, Vector3 End)
     float* endPoint = End.ToRecast().ToFloatArray().data();
     std::cout << endPoint[0] << " " << endPoint[1] << " " << endPoint[2] << std::endl;
 
-    float extents[VERTEX_SIZE] = { 3.0f, 5.0f, 3.0f };
+    float searchBoxSize[VERTEX_SIZE] = { 3.0f, 5.0f, 3.0f };
 
     
     dtPolyRef startPoly;
+    float startPolyPoint[3];
     dtPolyRef endPoly;
+    float endPolyPoint[3];
 
-    dtStatus startResult = navMeshQuery->findNearestPoly(startPoint, extents, &Queryfilter, &startPoly, startPoint);
+    dtStatus startResult = navMeshQuery->findNearestPoly(startPoint, searchBoxSize, &Queryfilter, &startPoly, startPolyPoint);
     if (dtStatusFailed(startResult))
     {
         std::cout << "Error finding nearest poly for start point" << std::endl;
         return false;
     }
 
-    dtStatus endResult = navMeshQuery->findNearestPoly(endPoint, extents, &Queryfilter, &endPoly, endPoint);
+    dtStatus endResult = navMeshQuery->findNearestPoly(endPoint, searchBoxSize, &Queryfilter, &endPoly, endPolyPoint);
     if (dtStatusFailed(endResult))
     {
         std::cout << "Error finding nearest poly for end point" << std::endl;
         return false;
     }
 
+    std::cout << "startPolyID: " << startPoly << std::endl;
+    std::cout << "endPolyID: " << endPoly << std::endl;
+    std::cout << "x: " << startPolyPoint[0] << " y: " << startPolyPoint[1] << " z: " << startPolyPoint[2] << std::endl;
+    std::cout << "x: " << endPolyPoint[0] << " y: " << endPolyPoint[1] << " z: " << endPolyPoint[2] << std::endl;
+
+
+
     dtStatus dtResult = DT_FAILURE;
-    int pathPointCount = 0; // Renamed from polyPathCount
+    int pathPolyCount = 0; // Renamed from polyPathCount
     dtResult = navMeshQuery->findPath(
         startPoly,          // start polygon
         endPoly,            // end polygon
-        startPoint,         // start position
-        endPoint,           // end position
+        startPolyPoint,         // start position
+        endPolyPoint,           // end position
         &Queryfilter,       // polygon search filter
         pathPolyRefs,       // [out] path
-        (int*)&pathPointCount,
+        (int*)&pathPolyCount,
         MAX_PATH_LENGTH);   // max number of polygons in output path.
 
-    if (!pathPointCount || dtStatusFailed(dtResult))
+    if (!pathPolyCount || dtStatusFailed(dtResult))
     {
         std::cout << "Error finding path" << std::endl;
         return false;
     }
 
-    // Make sure we don't exceed the maximum path point length
-    pathPointCount = std::min(pathPointCount, MAX_POINT_PATH_LENGTH);
-
-    pathPoints.resize(pathPointCount);
-    for (int i = 0; i < pathPointCount; ++i)
+    const int PATH_POINT_MAX = 100;
+    float pathPointArray[PATH_POINT_MAX * 3]; // Array to hold x, y, z for each point
+    int pathPointCount;
+    dtResult = navMeshQuery->findStraightPath(startPolyPoint, endPolyPoint, pathPolyRefs, pathPolyCount, pathPointArray, NULL, NULL, &pathPointCount, PATH_POINT_MAX);
+    if (dtStatusFailed(dtResult))
     {
-        std::cout << pathPolyRefs[i * VERTEX_SIZE] << " " << pathPolyRefs[i * VERTEX_SIZE + 1] 
-            << " " << pathPolyRefs[i * VERTEX_SIZE + 2] << std::endl;
-        pathPoints[i] = Vector3(pathPolyRefs[i * VERTEX_SIZE], pathPolyRefs[i * VERTEX_SIZE + 1], pathPolyRefs[i * VERTEX_SIZE + 2]);
+        std::cout << "Error finding straight path" << std::endl;
+        return false;
+    }
+
+    for (int i = 0; i < pathPointCount; i++)
+    {
+        float* pos = &pathPointArray[i * 3];
+        std::cout << "x: " << pos[0] << " y: " << pos[1] << " z: " << pos[2] << std::endl;
     }
 
     return true;
