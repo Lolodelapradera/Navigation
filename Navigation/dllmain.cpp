@@ -9,23 +9,22 @@ extern "C"
 {
     __declspec(dllexport) Vector3* CalculatePath(unsigned int mapId, Vector3 start, Vector3 end/*, bool smoothPath*/, int* length)
     {
-        return Instance->CalculatePath(mapId, start, end, length);
+        return NavigationManager::GetInstance()->CalculatePath(mapId, start, end, length);
     }
 
     __declspec(dllexport) void FreePathArr(Vector3* pathArr)
     {
-        return Instance->FreePathArr(pathArr);
+        return NavigationManager::GetInstance()->FreePathArr(pathArr);
     }
-
 };
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
+    NavigationManager* navigation = NavigationManager::GetInstance();
     switch (ul_reason_for_call)
     {
     case DLL_PROCESS_ATTACH:
         FileManager::MapPath = FileManager::GetMapPath();
-        Instance->GetInstance();
         Instance->Initialize();
         Instance->LoadMap();
         break;
