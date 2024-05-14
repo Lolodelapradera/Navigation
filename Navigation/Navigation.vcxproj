@@ -176,6 +176,8 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="Mapper.h" />
     <ClInclude Include="MapSharedData.h" />
+    <ClInclude Include="Marker.h" />
+    <ClInclude Include="NavigationFilter.h" />
     <ClInclude Include="NavigationManager.h" />
     <ClInclude Include="Pathfinder.h" />
     <ClInclude Include="pch.h" />
@@ -203,6 +205,8 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="Mapper.cpp" />
+    <ClCompile Include="Marker.cpp" />
+    <ClCompile Include="NavigationFilter.cpp" />
     <ClCompile Include="NavigationManager.cpp" />
     <ClCompile Include="Pathfinder.cpp" />
     <ClCompile Include="PathHelpers.cpp" />

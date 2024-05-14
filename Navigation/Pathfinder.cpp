@@ -5,11 +5,12 @@
 
 PathFinder::PathFinder(unsigned int mapId, unsigned int instanceId) :
 	polyLength(0), pointPathLimit(MAX_POINT_PATH_LENGTH),
-	mapId(mapId), InstanceId(instanceId), navMesh(NULL), navMeshQuery(NULL)
+	mapId(mapId), InstanceId(instanceId), navMesh(NULL), navMeshQuery(NULL), pathPoints(0)
 {
 
 	Mapper* Map = MapperHandle::MapHandle();
 	navMesh = Map->GetNavMesh(mapId);
+
 
 	navMeshQuery = Map->GetNavMeshQuery(mapId, InstanceId);
     
@@ -59,11 +60,10 @@ bool PathFinder::FindPolyPath(Vector3 Start, Vector3 End)
         return false;
     }
 
-
     // List of all blacklists
     // mapid blacklistPoint blacklistRadius
 
-    //PathFinder::ApplyCircleBlacklistToPolys(navMeshQuery, Vector3(-8898.23f, -119.838f, 81.83264f), 10);
+   //PathFinder::ApplyCircleBlacklistToPolys(navMeshQuery, Vector3(-8898.23f, -119.838f, 81.83264f), 50);
 
     dtStatus dtResult = DT_FAILURE;
     dtResult = navMeshQuery->findPath(
@@ -82,18 +82,18 @@ bool PathFinder::FindPolyPath(Vector3 Start, Vector3 End)
         return false;
     }
 
-    for (int i = 0; i < polyLength; i++)
-    {
-        dtPolyRef polyR = pathPolyRefs[i];
+    //for (int i = 0; i < polyLength; i++)
+    //{
+    //    dtPolyRef polyR = pathPolyRefs[i];
 
-        const dtMeshTile* tile;
-        const dtPoly* poly;
+    //    const dtMeshTile* tile;
+    //    const dtPoly* poly;
 
-        navMeshQuery->getAttachedNavMesh()->getTileAndPolyByRefUnsafe(polyR, &tile, &poly);
-        //dtStatus status = navMesh->getTileAndPolyByRef(polyR, &tile, &poly);
+    //    navMeshQuery->getAttachedNavMesh()->getTileAndPolyByRefUnsafe(polyR, &tile, &poly);
+    //    //dtStatus status = navMesh->getTileAndPolyByRef(polyR, &tile, &poly);
 
-        std::cout << "PolyArea: " << static_cast<int>(poly->getArea()) << std::endl;
-    }
+    //    std::cout << "PolyArea: " << static_cast<int>(poly->getArea()) << std::endl;
+    //}
 
     FindPath(startPoint, endPoint);
 }

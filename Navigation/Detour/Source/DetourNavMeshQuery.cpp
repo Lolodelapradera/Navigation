@@ -712,6 +712,7 @@ dtStatus dtNavMeshQuery::findNearestPoly(const float* center, const float* halfE
 	
 	dtFindNearestPolyQuery query(this, center);
 
+
 	dtStatus status = queryPolygons(center, halfExtents, filter, &query);
 	if (dtStatusFailed(status))
 		return status;

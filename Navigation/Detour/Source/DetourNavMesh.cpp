@@ -1207,6 +1207,21 @@ dtStatus dtNavMesh::getTileAndPolyByRef(const dtPolyRef ref, const dtMeshTile** 
 	return DT_SUCCESS;
 }
 
+dtStatus dtNavMesh::getTileAndPolyByRefAndForce(dtPolyRef ref, dtMeshTile** tile, dtPoly** poly) const
+{
+	if (!ref) return DT_FAILURE;
+	unsigned int salt, it, ip;
+	decodePolyId(ref, salt, it, ip);
+
+	if (it >= (unsigned int)m_maxTiles) return DT_FAILURE | DT_INVALID_PARAM;
+
+	if (m_tiles[it].salt != salt || m_tiles[it].header == 0) return DT_FAILURE | DT_INVALID_PARAM;
+	if (ip >= (unsigned int)m_tiles[it].header->polyCount) return DT_FAILURE | DT_INVALID_PARAM;
+	*tile = &m_tiles[it];
+	*poly = &m_tiles[it].polys[ip];
+	return DT_SUCCESS;
+}
+
 /// @par
 ///
 /// @warning Only use this function if it is known that the provided polygon

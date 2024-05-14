@@ -1,6 +1,7 @@
 #include <windows.h>
 #include "File.h"
 #include "NavigationManager.h"
+#include "Marker.h"
 
 
 extern "C"
@@ -16,14 +17,19 @@ extern "C"
         return NavigationManager::GetInstance()->FreePathArr(pathArr);
     }
 
-    __declspec(dllexport) void Blacklist(unsigned int mapid, Vector3 spot, float r)
+    __declspec(dllexport) void Blacklist(unsigned int mapid, const char* Name, Vector3 spot, float r, unsigned int Type)
     {
-        return NavigationManager::GetInstance()->AddBlacklist(mapid, spot, r);
+        return MarkerCreator::AddMarker(mapid, Name, spot, r, Area::Blacklisted);
     }
+
+
 };
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
+
+    //MarkerCreator::AddMarker(0, "TestBlackListing", Vector3(-8898.23f, -119.838f, 81.83264f), 25.0f, Area::Blacklisted);
+
     NavigationManager* navigation = NavigationManager::GetInstance();
     switch (ul_reason_for_call)
     {

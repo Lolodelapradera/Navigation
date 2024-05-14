@@ -175,7 +175,11 @@ struct dtPoly
 	unsigned char areaAndtype;
 
 	/// Sets the user defined area id. [Limit: < #DT_MAX_AREAS]
-	inline void setArea(unsigned char a) { areaAndtype = (areaAndtype & 0xc0) | (a & 0x3f); }
+	inline void setArea(unsigned char a)
+	{
+		
+		areaAndtype = (areaAndtype & 0xc0) | (a & 0x3f);
+	}
 
 	/// Sets the polygon type. (See: #dtPolyTypes.)
 	inline void setType(unsigned char t) { areaAndtype = (areaAndtype & 0x3f) | (t << 6); }
@@ -348,6 +352,8 @@ public:
 	///  @param[in]	params		Initialization parameters.
 	/// @return The status flags for the operation.
 	dtStatus init(const dtNavMeshParams* params);
+
+	dtStatus getTileAndPolyByRefAndForce(dtPolyRef ref, dtMeshTile** tile, dtPoly** poly) const;
 
 	/// Initializes the navigation mesh for single tile use.
 	///  @param[in]	data		Data of the new tile. (See: #dtCreateNavMeshData)

@@ -21,7 +21,7 @@ namespace Navigation_Tester
 
             var results = Loader.CalculatePath(mapId, playerPosition, moveToTargetPosition).Count();
 
-            //Loader.AddToBlacklist(0, blacklistPosition, 10);
+          
 
             var results2 = Loader.CalculatePath(mapId, playerPosition, moveToTargetPosition).Count();
 

@@ -88,8 +88,9 @@ public:
 	 */
 	bool loadMap(unsigned int mapId, int x, int y);
 
-	dtNavMeshQuery const* GetNavMeshQuery(unsigned int mapId, unsigned int instanceId);
+	dtNavMeshQuery* GetNavMeshQuery(unsigned int mapId, unsigned int instanceId);
 	dtNavMesh const* GetNavMesh(unsigned int mapId);
+	MMapDataSet loadedMMaps;
 
 private:
 
@@ -135,7 +136,7 @@ private:
 	 * Key: Map ID
 	 * Value: Boolean indicating whether the map is loaded or not.
 	 */
-	MMapDataSet loadedMMaps;
+	/*MMapDataSet loadedMMaps;*/
 
 };
 

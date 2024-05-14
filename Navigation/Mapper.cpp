@@ -170,7 +170,7 @@ unsigned int Mapper::packTileID(int x, int y)
 	return unsigned int(x << 16 | y);
 }
 
-dtNavMeshQuery const* Mapper::GetNavMeshQuery(unsigned int mapId, unsigned int instanceId)
+dtNavMeshQuery* Mapper::GetNavMeshQuery(unsigned int mapId, unsigned int instanceId)
 {
 	if (loadedMMaps.find(mapId) == loadedMMaps.end()) // Map is there aka loaded in memory
 		return NULL;

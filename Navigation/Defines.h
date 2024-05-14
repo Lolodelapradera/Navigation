@@ -36,3 +36,6 @@
   * @brief Size of the grids used in MMAP.
   */
 #define SIZE_OF_GRIDS 533.33333f
+
+#define MY_MIN(a, b) ((a) < (b) ? (a) : (b))
+#define MY_MAX(a, b) ((a) > (b) ? (a) : (b))

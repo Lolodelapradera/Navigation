@@ -31,6 +31,12 @@
     <Filter Include="Navigation\Enums">
       <UniqueIdentifier>{2a6ca1b3-36bd-42a0-8b5d-56f56306e08d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Navigation\Filter">
+      <UniqueIdentifier>{dda971b5-f3f9-4a6d-a1c0-7079176f20a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Navigation\Filter\Header">
+      <UniqueIdentifier>{0aaf79dd-c061-45ed-9819-e853c4d1cf33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -123,6 +129,12 @@
     <ClInclude Include="Defines.h">
       <Filter>Common\Header</Filter>
     </ClInclude>
+    <ClInclude Include="NavigationFilter.h">
+      <Filter>Navigation\Filter\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Marker.h">
+      <Filter>Navigation\Filter\Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -196,6 +208,12 @@
     </ClCompile>
     <ClCompile Include="PathHelpers.cpp">
       <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="NavigationFilter.cpp">
+      <Filter>Navigation\Filter</Filter>
+    </ClCompile>
+    <ClCompile Include="Marker.cpp">
+      <Filter>Navigation\Filter</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
