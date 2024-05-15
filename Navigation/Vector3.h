@@ -29,4 +29,6 @@ public:
 	Vector3 Normalize() const;
 	Vector3 Normalize(Vector3 const& v) const;
 	float squaredLength() const;
+
+	
 };

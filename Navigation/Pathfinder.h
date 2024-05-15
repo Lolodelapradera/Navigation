@@ -3,7 +3,7 @@
 #include <DetourNavMeshQuery.h>
 #include "NavigationManager.h"
 #include "Defines.h"
-#include "NavigationFilter.h"
+#include "Marker.h"
 
 
 
@@ -16,16 +16,16 @@ public:
 	bool FindPolyPath(Vector3 Start, Vector3 End);
 	bool FindPath(const float* startPoint, const float* endPoint);
 	std::vector<Vector3>& getPath() { return pathPoints; }
-    bool ApplyCircleBlacklistToPolys(dtNavMeshQuery* meshQuery, const dtNavMesh* navmesh, Vector3 blacklistPoint, float radius);
-
+    static bool ApplyCircleBlacklistToPolys(dtNavMeshQuery* meshQuery, const dtNavMesh* navmesh, dtQueryFilter query, Marker Options);
 
 
 private:
 
 	void SetFilters();
+	
+
+    dtQueryFilter Queryfilter;
 	float searchBoxSize[VERTEX_SIZE] = { 3.0f, 5.0f, 3.0f };
-
-
 
 	dtPolyRef  GetNearestPoly(const float* startPoint) const;
 
@@ -41,10 +41,11 @@ private:
 		polyLength = 0;
 		pathPoints.clear();
 	}
+
 	/**
 	 * @brief Query filter used for navigation queries.
 	 */
-	NavivationFilter Queryfilter;
+	//dtQueryFilter Queryfilter;
 
 	/**
 	 * @brief Array to store maximum polygon counts.

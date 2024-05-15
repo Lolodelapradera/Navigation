@@ -36,6 +36,11 @@ namespace Navigation_Tester.Common
         private delegate void NativationDebugger(bool OnOROff);
         private static NativationDebugger debugger;
 
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void RemoveFromBlacklist(string OnOROff);
+        private static RemoveFromBlacklist Remove;
+
         internal static void Load()
         {
             var currentFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -72,6 +77,13 @@ namespace Navigation_Tester.Common
 
                 debugger = Marshal.GetDelegateForFunctionPointer<NativationDebugger>(_Debugger);
             }
+
+            var _remove = GetProcAddress(navProcPtr, "___Remove");
+            if (_remove != IntPtr.Zero)
+            {
+
+                Remove = Marshal.GetDelegateForFunctionPointer<RemoveFromBlacklist>(_remove);
+            }
         }
 
         public static void AddBlackList(uint Mapid, string Name, Vector3 p, float radius, uint Type)
@@ -84,6 +96,11 @@ namespace Navigation_Tester.Common
             {
                 Console.WriteLine($"Error AddBlackList: {ex.Message}");
             }
+        }
+
+        public static void __Remove(string Name)
+        {
+            Remove(Name);
         }
 
         internal static void NavigationDebugger(bool OnOrOff)

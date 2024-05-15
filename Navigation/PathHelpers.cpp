@@ -1,22 +1,21 @@
 #include "Pathfinder.h"
+#include "Marker.h"
 #include "AreaEnums.h"
 
 
-
-bool PathFinder::ApplyCircleBlacklistToPolys(dtNavMeshQuery* meshQuery, const dtNavMesh* navMesh, Vector3 blacklistPoint, float radius) {
-    if (!meshQuery || !navMesh)
+bool PathFinder::ApplyCircleBlacklistToPolys(dtNavMeshQuery* meshQuery, const dtNavMesh* navmesh, dtQueryFilter query, Marker Options)
+{
+    if (!meshQuery || !navmesh)
     {
         std::cerr << "MeshQuery or NavMesh is null." << std::endl;
         return false;
     }
-
-    // Convert blacklistPoint to the appropriate format
-   // float searchPoint[3] = { blacklistPoint.X, blacklistPoint.Y, blacklistPoint.Z };
-    float* searchPoint = blacklistPoint.ToFloatArray().data();
+    float searchBoxSize[VERTEX_SIZE] = { 3.0f, 5.0f, 3.0f };
+    float* searchPoint = Options.position.ToRecast().ToFloatArray().data();
 
     dtPolyRef CenterPoly;
     float CenterPolyPoint[3];
-    dtStatus startResult = meshQuery->findNearestPoly(searchPoint, PathFinder::searchBoxSize, &Queryfilter, &CenterPoly, CenterPolyPoint);
+    dtStatus startResult = meshQuery->findNearestPoly(searchPoint, searchBoxSize, &query, &CenterPoly, CenterPolyPoint);
     if (dtStatusFailed(startResult)) {
         std::cerr << "Failed to find nearest poly." << std::endl;
         return false;
@@ -26,7 +25,7 @@ bool PathFinder::ApplyCircleBlacklistToPolys(dtNavMeshQuery* meshQuery, const dt
     dtPolyRef polyRefsInCircle[POLY_ARRAY_MAX];
     int polyRefInCircleCount = 0;
 
-    dtStatus circleResult = meshQuery->findPolysAroundCircle(CenterPoly, searchPoint, radius, &Queryfilter, polyRefsInCircle, nullptr, nullptr, &polyRefInCircleCount, POLY_ARRAY_MAX);
+    dtStatus circleResult = meshQuery->findPolysAroundCircle(CenterPoly, searchPoint, Options.radius, &query, polyRefsInCircle, nullptr, nullptr, &polyRefInCircleCount, POLY_ARRAY_MAX);
     if (dtStatusFailed(circleResult)) {
         std::cerr << "Failed to find polys around circle." << std::endl;
         return false;
@@ -38,21 +37,29 @@ bool PathFinder::ApplyCircleBlacklistToPolys(dtNavMeshQuery* meshQuery, const dt
         const dtMeshTile* tile = nullptr;
         const dtPoly* poly = nullptr;
 
-        dtStatus tileAndPolyStatus = navMesh->getTileAndPolyByRef(polyRef, &tile, &poly);
-        if (dtStatusFailed(tileAndPolyStatus) || !poly) {
+        dtStatus tileAndPolyStatus = navmesh->getTileAndPolyByRef(polyRef, &tile, &poly);
+        if (dtStatusFailed(tileAndPolyStatus) || !poly)
+        {
             std::cerr << "Error retrieving tile and polygon by ref." << std::endl;
             continue;
         }
 
         // Modify the polygon area directly by using mutablePoly
         dtPoly* mutablePoly = const_cast<dtPoly*>(poly);
-        std::cout << "Polygon area: " << static_cast<int>(mutablePoly->getArea()) << std::endl;
+
+        if (NavigationManager::DEBUGMOD)
+        {
+            std::cout << "Polygon area: " << static_cast<int>(mutablePoly->getArea()) << std::endl;
+        }
 
         // Example: Set area ID to 35 (or any specific value you want)
-        mutablePoly->setArea(55);
+        mutablePoly->setArea(Options.Type);
 
-        // Debug output: Print the updated area of the mutablePoly
-        std::cout << "Polygon area after setting: " << static_cast<int>(mutablePoly->getArea()) << std::endl;
+        if (NavigationManager::DEBUGMOD)
+        {
+            // Debug output: Print the updated area of the mutablePoly
+            std::cout << "Polygon area after setting: " << static_cast<int>(mutablePoly->getArea()) << std::endl;
+        }
 
         //// If flags need to be set directly to 35
         //dtStatus setFlagsStatus = navMesh->setPolyFlags(polyRef, 35);

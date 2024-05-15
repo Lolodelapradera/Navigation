@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <iostream>
 #include "File.h"
 #include "NavigationManager.h"
 #include "Marker.h"
@@ -19,7 +20,7 @@ extern "C"
 
     __declspec(dllexport) void Blacklist(unsigned int mapid, const char* Name, Vector3 spot, float r, unsigned int Type)
     {
-        return MarkerCreator::AddMarker(mapid, Name, spot, r, Area::Blacklisted);
+        return MarkerCreator::AddMarker(mapid, Name, spot, r, (Area)Type);
     }
 
     __declspec(dllexport) void Debugger(bool CanDebug)
@@ -27,13 +28,21 @@ extern "C"
         NavigationManager::DEBUGMOD = CanDebug;
     }
 
+    __declspec(dllexport) void ___Remove(const char* name)
+    {
+       
+        return MarkerCreator::RemoveMarker(std::string(name));
+    }
+
+
+
 
 };
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
 
-    //MarkerCreator::AddMarker(0, "TestBlackListing", Vector3(-8898.23f, -119.838f, 81.83264f), 25.0f, Area::Blacklisted);
+    //MarkerCreator::AddMarker(0, "TestBlackListing", Vector3(-8898.23f, -119.838f, 81.83264f), 75.0f, Area::Blacklisted);
 
     NavigationManager* navigation = NavigationManager::GetInstance();
     switch (ul_reason_for_call)

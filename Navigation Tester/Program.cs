@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Navigation_Tester
 {
@@ -15,19 +16,15 @@ namespace Navigation_Tester
             Loader.Load();
 
             uint mapId = 0;
-            var moveToTargetPosition = new Vector3(-8831.653f, -97.78971f, 84.78954f);
-            var blacklistPosition = new Vector3(-8898.23f, -119.838f, 81.83264f);
-            var playerPosition = new Vector3(-8949.95f, -132.493f, 83.5312f);
+            //new Vector3(-8902.59f, -162.606f, 81.93913f),
+            //new Vector3(-8945.741f, -129.6458f, 83.56361f),
+            var player = new Vector3(-8945.741f, -129.6458f, 83.56361f);
+            var target = new Vector3(-8902.59f, -162.606f, 81.93913f);
+           
 
-            var results = Loader.CalculatePath(mapId, playerPosition, moveToTargetPosition).Count();
+            var results = Loader.CalculatePath(mapId, player, target).Count();
 
-           // Loader.AddBlackList(mapId, "test", blacklistPosition, 100, 55);
 
-           // Loader.NavigationDebugger(true);
-
-            //var results2 = Loader.CalculatePath(mapId, playerPosition, moveToTargetPosition).Count();
-
-            Console.WriteLine($"Results = {results}");
 
 
             Console.WriteLine("App Completed");

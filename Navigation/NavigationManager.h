@@ -17,8 +17,6 @@ public:
 	void FreePathArr(Vector3* pathArr);
 
 	Vector3* CalculatePath(unsigned int mapId, Vector3 start, Vector3 end , int* length);
-
-	void AddBlacklist(int mapid, Vector3, float r);
 	static bool DEBUGMOD;
 
 private:
