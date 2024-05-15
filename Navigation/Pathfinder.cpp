@@ -7,15 +7,15 @@ PathFinder::PathFinder(unsigned int mapId, unsigned int instanceId) :
 	polyLength(0), pointPathLimit(MAX_POINT_PATH_LENGTH),
 	mapId(mapId), InstanceId(instanceId), navMesh(NULL), navMeshQuery(NULL), pathPoints(0)
 {
-
+    //SetFilters();
 	Mapper* Map = MapperHandle::MapHandle();
 	navMesh = Map->GetNavMesh(mapId);
-
-
-	navMeshQuery = Map->GetNavMeshQuery(mapId, InstanceId);
+    navMeshQuery = Map->GetNavMeshQuery(mapId, InstanceId);
+    PathFinder::ApplyCircleBlacklistToPolys(navMeshQuery, navMesh, Vector3(-8898.23f, -119.838f, 81.83264f).ToRecast(), 25.0f);
+    SetFilters();
     
   
-	SetFilters();
+	
 
 }
 
@@ -63,7 +63,7 @@ bool PathFinder::FindPolyPath(Vector3 Start, Vector3 End)
     // List of all blacklists
     // mapid blacklistPoint blacklistRadius
 
-   //PathFinder::ApplyCircleBlacklistToPolys(navMeshQuery, Vector3(-8898.23f, -119.838f, 81.83264f), 50);
+   
 
     dtStatus dtResult = DT_FAILURE;
     dtResult = navMeshQuery->findPath(
@@ -125,7 +125,11 @@ bool PathFinder::FindPath(const float* startPoint, const float* endPoint)
     for (int i = 0; i < pathPointCount; i++)
     {
         float* pos = &pathPointArray[i * 3];
-        std::cout << "x: " << pos[0] << " y: " << pos[1] << " z: " << pos[2] << std::endl;
+
+        if (NavigationManager::DEBUGMOD)
+        {
+            std::cout << "x: " << pos[0] << " y: " << pos[1] << " z: " << pos[2] << std::endl;
+        }
         pathPoints.push_back(Vector3(pos[0], pos[1], pos[2]).ToWoW());
     }
 

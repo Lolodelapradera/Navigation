@@ -10,6 +10,7 @@
 
 
 NavigationManager* NavigationManager::s_singletonInstance = nullptr;
+bool NavigationManager::DEBUGMOD = false;
 NavigationManager* NavigationManager::GetInstance()
 {
     if (s_singletonInstance == NULL)

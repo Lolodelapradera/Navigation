@@ -16,7 +16,7 @@ public:
 	bool FindPolyPath(Vector3 Start, Vector3 End);
 	bool FindPath(const float* startPoint, const float* endPoint);
 	std::vector<Vector3>& getPath() { return pathPoints; }
-    bool ApplyCircleBlacklistToPolys(dtNavMeshQuery* meshQuery, Vector3 blacklistPoint, float radius);
+    bool ApplyCircleBlacklistToPolys(dtNavMeshQuery* meshQuery, const dtNavMesh* navmesh, Vector3 blacklistPoint, float radius);
 
 
 

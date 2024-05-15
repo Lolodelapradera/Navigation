@@ -89,7 +89,7 @@ public:
 	bool loadMap(unsigned int mapId, int x, int y);
 
 	dtNavMeshQuery* GetNavMeshQuery(unsigned int mapId, unsigned int instanceId);
-	dtNavMesh const* GetNavMesh(unsigned int mapId);
+	dtNavMesh const*  GetNavMesh(unsigned int mapId);
 	MMapDataSet loadedMMaps;
 
 private:

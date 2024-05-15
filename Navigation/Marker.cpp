@@ -1,12 +1,16 @@
 #include "Marker.h"
 #include <iostream>
+#include "NavigationManager.h"
 
 
 std::vector<Marker> MarkerCreator::Marks;
 void MarkerCreator::AddMarker(unsigned int mapid, const char* name, Vector3 position, float radius, Area type)
 {
-    std::cout << "[Marker] Adding " << name << " MapID " << mapid << "x: " << position.X << " y: " << position.Y << " z: " << position.Z << " Type: "
-        << type << std::endl;
+    if (NavigationManager::DEBUGMOD)
+    {
+        std::cout << "[Marker] Adding " << name << " MapID " << mapid << " x: " << position.X << " y: " << position.Y << " z: " << position.Z << " radius: " 
+            << radius << " Type: " << type << std::endl;
+    }
     Marks.emplace_back(Marker(mapid, name, position, radius, type));
 }
 

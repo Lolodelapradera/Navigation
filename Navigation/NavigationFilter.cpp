@@ -8,25 +8,40 @@ bool NavivationFilter::passFilter(const dtPolyRef polyRef, const dtMeshTile* til
     for (const Marker& Entry : MarkerCreator::Marks)
     {
         std::array<float, 3> entry = Entry.position.ToRecast().ToFloatArray();
-        if (IsTileInBlacklistArea(tile, entry, Entry.radius))
+
+        const float* VertsPoints = &tile->verts[0];
+        for (int i = 0; i < tile->header->polyCount; ++i)
+        {
+            dtPoly* poly = &tile->polys[i];
+            for (int j = 0; j < poly->vertCount; ++j)
+            {
+                const float* vertex = &VertsPoints[poly->verts[j] * 3];
+                float rcDist = dtVdist2D(entry.data(), vertex);
+                if (rcDist <= Entry.radius)
+                {
+                    poly->setArea(55);
+                }
+            }
+        }
+
+
+       /* if (IsTileInBlacklistArea(tile, entry, Entry.radius))
         {
             const float* VertsPoints = &tile->verts[0]; 
             for (int i = 0; i < tile->header->polyCount; ++i) 
             {
                 dtPoly* poly = &tile->polys[i];
-
                 for (int j = 0; j < poly->vertCount; ++j) 
                 {
                     const float* vertex = &VertsPoints[poly->verts[j] * 3]; 
                     float rcDist = dtVdist2D(entry.data(), vertex);
                     if (rcDist <= Entry.radius) 
                     {
-                      
                         poly->setArea(55);
                     }
                 }
             }
-        }
+        }*/
     }
     return dtQueryFilter::passFilter(polyRef, tile, poly);
 }

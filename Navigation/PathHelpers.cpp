@@ -3,53 +3,83 @@
 
 
 
-bool PathFinder::ApplyCircleBlacklistToPolys(dtNavMeshQuery* meshQuery, Vector3 blacklistPoint, float radius)
-{
-	float* searchPoint = blacklistPoint.ToRecast().ToFloatArray().data();
-	Mapper* Map = MapperHandle::MapHandle();
-	auto NavMesh = Map->loadedMMaps[0]->navMesh;
+bool PathFinder::ApplyCircleBlacklistToPolys(dtNavMeshQuery* meshQuery, const dtNavMesh* navMesh, Vector3 blacklistPoint, float radius) {
+    if (!meshQuery || !navMesh)
+    {
+        std::cerr << "MeshQuery or NavMesh is null." << std::endl;
+        return false;
+    }
 
+    // Convert blacklistPoint to the appropriate format
+   // float searchPoint[3] = { blacklistPoint.X, blacklistPoint.Y, blacklistPoint.Z };
+    float* searchPoint = blacklistPoint.ToFloatArray().data();
 
-	dtPolyRef CenterPoly;
-	float CenterPolyPoint[3];
-	dtStatus startResult = meshQuery->findNearestPoly(searchPoint, PathFinder::searchBoxSize, &Queryfilter, &CenterPoly, CenterPolyPoint);
+    dtPolyRef CenterPoly;
+    float CenterPolyPoint[3];
+    dtStatus startResult = meshQuery->findNearestPoly(searchPoint, PathFinder::searchBoxSize, &Queryfilter, &CenterPoly, CenterPolyPoint);
+    if (dtStatusFailed(startResult)) {
+        std::cerr << "Failed to find nearest poly." << std::endl;
+        return false;
+    }
 
-	const int POLY_ARRAY_MAX = 50;
-	dtPolyRef polyRefsInCircle[POLY_ARRAY_MAX];
-	int polyRefInCircleCount;
+    const int POLY_ARRAY_MAX = 1000;
+    dtPolyRef polyRefsInCircle[POLY_ARRAY_MAX];
+    int polyRefInCircleCount = 0;
 
-	meshQuery->findPolysAroundCircle(CenterPoly, searchPoint, radius, &Queryfilter, polyRefsInCircle, nullptr, nullptr, &polyRefInCircleCount, POLY_ARRAY_MAX);
+    dtStatus circleResult = meshQuery->findPolysAroundCircle(CenterPoly, searchPoint, radius, &Queryfilter, polyRefsInCircle, nullptr, nullptr, &polyRefInCircleCount, POLY_ARRAY_MAX);
+    if (dtStatusFailed(circleResult)) {
+        std::cerr << "Failed to find polys around circle." << std::endl;
+        return false;
+    }
 
-	for (int i = 0; i < polyRefInCircleCount; i++)
-	{
-		dtPolyRef polyRef = polyRefsInCircle[i];
+    for (int i = 0; i < polyRefInCircleCount; ++i) {
+        dtPolyRef polyRef = polyRefsInCircle[i];
 
-		const dtMeshTile* tile;
-		const dtPoly* poly;
+        const dtMeshTile* tile = nullptr;
+        const dtPoly* poly = nullptr;
 
-		// Get the tile and polygon reference safely
-	
-		NavMesh->getTileAndPolyByRef(polyRef, &tile, &poly);
+        dtStatus tileAndPolyStatus = navMesh->getTileAndPolyByRef(polyRef, &tile, &poly);
+        if (dtStatusFailed(tileAndPolyStatus) || !poly) {
+            std::cerr << "Error retrieving tile and polygon by ref." << std::endl;
+            continue;
+        }
 
+        // Modify the polygon area directly by using mutablePoly
+        dtPoly* mutablePoly = const_cast<dtPoly*>(poly);
+        std::cout << "Polygon area: " << static_cast<int>(mutablePoly->getArea()) << std::endl;
 
+        // Example: Set area ID to 35 (or any specific value you want)
+        mutablePoly->setArea(55);
 
+        // Debug output: Print the updated area of the mutablePoly
+        std::cout << "Polygon area after setting: " << static_cast<int>(mutablePoly->getArea()) << std::endl;
 
-		//dtStatus status = navMesh->getTileAndPolyByRef(polyRef, &tile, &poly);
+        //// If flags need to be set directly to 35
+        //dtStatus setFlagsStatus = navMesh->setPolyFlags(polyRef, 35);
+        //if (dtStatusFailed(setFlagsStatus)) {
+        //    std::cerr << "Error setting polygon flags." << std::endl;
+        //    continue;
+        //}
 
+        //// Verify the flags were set correctly
+        //unsigned short verifyFlags;
+        //dtStatus verifyStatus = navMesh->getPolyFlags(polyRef, &verifyFlags);
+        //if (dtStatusFailed(verifyStatus)) {
+        //    std::cerr << "Error verifying polygon flags." << std::endl;
+        //    continue;
+        //}
 
-		if (poly)
-		{
-			std::cout << "settings 55" << std::endl;
-			// Cast away const to modify the area type
+        // Debug output: Print the verified flags
+        /*std::cout << "Polygon flags set to: " << verifyFlags << std::endl;*/
+    }
 
-			dtPoly* mutablePoly = const_cast<dtPoly*>(poly);
-
-			mutablePoly->setArea(Area::Blacklisted);
-		}
-	}
-
-	return false;
+    return true;
 }
+
+
+
+
+
 
 
 
@@ -59,7 +89,7 @@ void PathFinder::SetFilters()
 	//Queryfilter.setAreaCost(Area::Walkable, 1);
 	Queryfilter.setAreaCost(Area::LowThread, 100);
 	Queryfilter.setAreaCost(Area::HighThread, 150);
-	Queryfilter.setAreaCost(Area::Blacklisted, 1500);
+	Queryfilter.setAreaCost(Area::Blacklisted, 1000);
 
 	unsigned short includeFlags = 0;
 	unsigned short excludeFlags = 0;

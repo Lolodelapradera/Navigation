@@ -28,8 +28,13 @@ namespace Navigation_Tester.Common
         private static FreePathArr freePathArr;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate void AddBlackListDelegate(uint mapId, XYZ p, float radius);
+        private delegate void AddBlackListDelegate(uint Mapid, string name, XYZ p, float radius, uint Type);
         private static AddBlackListDelegate Blacklist;
+
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate void NativationDebugger(bool OnOROff);
+        private static NativationDebugger debugger;
 
         internal static void Load()
         {
@@ -60,11 +65,30 @@ namespace Navigation_Tester.Common
 
                 Blacklist = Marshal.GetDelegateForFunctionPointer<AddBlackListDelegate>(Blacklistptr);
             }
+
+            var _Debugger = GetProcAddress(navProcPtr, "Debugger");
+            if (freePathPtr != IntPtr.Zero)
+            {
+
+                debugger = Marshal.GetDelegateForFunctionPointer<NativationDebugger>(_Debugger);
+            }
         }
 
-        internal static void AddToBlacklist(uint mapId, Vector3 p, float radius)
+        public static void AddBlackList(uint Mapid, string Name, Vector3 p, float radius, uint Type)
         {
-            Blacklist(mapId, p.ToXYZ(), radius);
+            try
+            {
+                Blacklist(Mapid, Name, p.ToXYZ(), radius, Type);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error AddBlackList: {ex.Message}");
+            }
+        }
+
+        internal static void NavigationDebugger(bool OnOrOff)
+        {
+            debugger(OnOrOff);
         }
 
         internal static Vector3[] CalculatePath(uint mapId, Vector3 start, Vector3 end)

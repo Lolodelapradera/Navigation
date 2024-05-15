@@ -22,6 +22,11 @@ extern "C"
         return MarkerCreator::AddMarker(mapid, Name, spot, r, Area::Blacklisted);
     }
 
+    __declspec(dllexport) void Debugger(bool CanDebug)
+    {
+        NavigationManager::DEBUGMOD = CanDebug;
+    }
+
 
 };
 
