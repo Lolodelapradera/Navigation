@@ -16,8 +16,6 @@ PathFinder::PathFinder(unsigned int mapId, unsigned int instanceId) :
     MarkerCreator::Remove(navMeshQuery, navMesh, Queryfilter);
     MarkerCreator::Apply(navMeshQuery, navMesh, Queryfilter);
   
-	
-
 }
 
 
@@ -60,11 +58,6 @@ bool PathFinder::FindPolyPath(Vector3 Start, Vector3 End)
         std::cout << "Error finding nearest poly for end point" << std::endl;
         return false;
     }
-
-    // List of all blacklists
-    // mapid blacklistPoint blacklistRadius
-
-    //PathFinder::ApplyCircleBlacklistToPolys(navMeshQuery, navMesh, Queryfilter, Marker(0, "TestBlackListing", Vector3(-8898.23f, -119.838f, 81.83264f), 25.0f, Area::Blacklisted));
 
     dtStatus dtResult = DT_FAILURE;
     dtResult = navMeshQuery->findPath(
@@ -112,13 +105,11 @@ bool PathFinder::FindPath(const float* startPoint, const float* endPoint)
         return false;
     }
 
-
-
     for (int i = 0; i < pathPointCount; i++)
     {
         float* pos = &pathPointArray[i * 3];
 
-
+        ModifyPoint(pos);
         if (NavigationManager::DEBUGMOD)
         {
             std::cout << "x: " << pos[0] << " y: " << pos[1] << " z: " << pos[2] << std::endl;

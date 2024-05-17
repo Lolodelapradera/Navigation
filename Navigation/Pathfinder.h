@@ -17,6 +17,8 @@ public:
 	bool FindPath(const float* startPoint, const float* endPoint);
 	std::vector<Vector3>& getPath() { return pathPoints; }
     static bool ApplyCircleBlacklistToPolys(dtNavMeshQuery* meshQuery, const dtNavMesh* navmesh, dtQueryFilter query, Marker Options);
+	dtStatus DistanceToWall(float* pos, float* Hitpos, float* distance);
+	bool ModifyPoint(float* Pos);
 
 
 private:
@@ -32,6 +34,7 @@ private:
 	bool inRangeYZX(const float* v1, const float* v2, float r, float h) const;
 	bool inRange(const Vector3& p1, const Vector3& p2, float r, float h) const;
 	float dist3DSqr(const Vector3& p1, const Vector3& p2) const;
+
 
 
 

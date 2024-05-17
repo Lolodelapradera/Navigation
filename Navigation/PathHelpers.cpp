@@ -61,34 +61,11 @@ bool PathFinder::ApplyCircleBlacklistToPolys(dtNavMeshQuery* meshQuery, const dt
             std::cout << "Polygon area after setting: " << static_cast<int>(mutablePoly->getArea()) << std::endl;
         }
 
-        //// If flags need to be set directly to 35
-        //dtStatus setFlagsStatus = navMesh->setPolyFlags(polyRef, 35);
-        //if (dtStatusFailed(setFlagsStatus)) {
-        //    std::cerr << "Error setting polygon flags." << std::endl;
-        //    continue;
-        //}
-
-        //// Verify the flags were set correctly
-        //unsigned short verifyFlags;
-        //dtStatus verifyStatus = navMesh->getPolyFlags(polyRef, &verifyFlags);
-        //if (dtStatusFailed(verifyStatus)) {
-        //    std::cerr << "Error verifying polygon flags." << std::endl;
-        //    continue;
-        //}
-
-        // Debug output: Print the verified flags
-        /*std::cout << "Polygon flags set to: " << verifyFlags << std::endl;*/
+      
     }
 
     return true;
 }
-
-
-
-
-
-
-
 
 
 void PathFinder::SetFilters()
@@ -157,3 +134,83 @@ dtPolyRef PathFinder::GetNearestPoly(const float* startPoint) const
 	}
 	return startPoly;
 }
+
+
+dtStatus PathFinder::DistanceToWall(float* pos, float* Hitpos, float* distance)
+{
+
+    dtPolyRef polyref;
+    float CenterPolyPoint[3];
+    float hitNormal[3];
+
+    dtStatus startResult = navMeshQuery->findNearestPoly(pos, searchBoxSize, &Queryfilter, &polyref, CenterPolyPoint);
+
+    if (dtStatusFailed(startResult))
+    {
+        std::cerr << "CheckPath : Failed to find nearest poly." << std::endl;
+        return false;
+    }
+
+    return navMeshQuery->findDistanceToWall(
+        polyref,                   // [in]    startRef The reference id of the polygon containing @p centerPos.
+        pos,                   // [in]    centerPos The center of the search circle.[(x, y, z)]
+        100.0f,                // [in]    maxRadius The radius of the search circle.
+        &Queryfilter,          // [in]    queryFilter The query filter used to find the nearest wall.
+        distance,              // [out]   hitDist The distance to the nearest wall from @p centerPos.
+        Hitpos,                // [out]   hitPos The nearest position on the wall that was hit. [(x, y, z)]
+        hitNormal);            // [out]   hitNormal The normalized ray formed from the wall point to the hit point.
+}
+
+#define WallDistance 1.5f
+
+bool PathFinder::ModifyPoint(float* SearchPoint)
+{
+
+    float hitpos[3];
+    float DistanceLeft = 0.0f;
+    float DistanceRight = 0.0f;
+    float DistanceFront = 0.0f;
+
+    // Calculate the position to the left
+    float leftPosition[3] = { SearchPoint[0] - WallDistance, SearchPoint[1], SearchPoint[2] };
+    dtStatus Left = DistanceToWall(leftPosition, hitpos, &DistanceLeft);
+    if (dtStatusFailed(Left))
+    {
+        std::cerr << "CheckPath : Failed to find distance to wall on the left." << std::endl;
+        return false;
+    }
+
+    std::cout << "Left Position: x= " << leftPosition[0] << ", y= " << leftPosition[1] << ", z= " << leftPosition[2] << "\n";
+    std::cout << "Left Hitpos: x= " << hitpos[0] << ", y= " << hitpos[1] << ", z= " << hitpos[2] << "\n";
+    std::cout << "DistanceLeft: " << DistanceLeft << "\n\n";
+
+    // Calculate the position to the right
+    float rightPosition[3] = { SearchPoint[0] + WallDistance, SearchPoint[1], SearchPoint[2] };
+    dtStatus Right = DistanceToWall(rightPosition, hitpos, &DistanceRight);
+    if (dtStatusFailed(Right))
+    {
+        std::cerr << "CheckPath : Failed to find distance to wall on the right." << std::endl;
+        return false;
+    }
+
+    std::cout << "Right Position: x= " << rightPosition[0] << ", y= " << rightPosition[1] << ", z= " << rightPosition[2] << "\n";
+    std::cout << "Right Hitpos: x= " << hitpos[0] << ", y= " << hitpos[1] << ", z= " << hitpos[2] << "\n";
+    std::cout << "DistanceRight: " << DistanceRight << "\n\n";
+
+    // Calculate the position in front
+    float frontPosition[3] = { SearchPoint[0], SearchPoint[1], SearchPoint[2] + WallDistance };
+    dtStatus Front = DistanceToWall(frontPosition, hitpos, &DistanceFront);
+    if (dtStatusFailed(Front))
+    {
+        std::cerr << "CheckPath : Failed to find distance to wall in front." << std::endl;
+        return false;
+    }
+
+    std::cout << "Front Position: x= " << frontPosition[0] << ", y= " << frontPosition[1] << ", z= " << frontPosition[2] << "\n";
+    std::cout << "Front Hitpos: x= " << hitpos[0] << ", y= " << hitpos[1] << ", z= " << hitpos[2] << "\n";
+    std::cout << "DistanceFront: " << DistanceFront << "\n\n";
+
+    return false;
+}
+
+
