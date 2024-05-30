@@ -34,16 +34,10 @@ extern "C"
         return MarkerCreator::RemoveMarker(std::string(name));
     }
 
-
-
-
 };
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
-
-    //MarkerCreator::AddMarker(0, "TestBlackListing", Vector3(-8898.23f, -119.838f, 81.83264f), 75.0f, Area::Blacklisted);
-
     NavigationManager* navigation = NavigationManager::GetInstance();
     switch (ul_reason_for_call)
     {

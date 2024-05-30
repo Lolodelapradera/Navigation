@@ -12,7 +12,9 @@ PathFinder::PathFinder(unsigned int mapId, unsigned int instanceId) :
 	Mapper* Map = MapperHandle::MapHandle();
 	navMesh = Map->GetNavMesh(mapId);
     navMeshQuery = Map->GetNavMeshQuery(mapId, InstanceId);
+
     SetFilters();
+
     MarkerCreator::Remove(navMeshQuery, navMesh, Queryfilter);
     MarkerCreator::Apply(navMeshQuery, navMesh, Queryfilter);
   
@@ -105,17 +107,18 @@ bool PathFinder::FindPath(const float* startPoint, const float* endPoint)
         return false;
     }
 
+
     for (int i = 0; i < pathPointCount; i++)
     {
         float* pos = &pathPointArray[i * 3];
 
-        ModifyPoint(pos);
         if (NavigationManager::DEBUGMOD)
         {
             std::cout << "x: " << pos[0] << " y: " << pos[1] << " z: " << pos[2] << std::endl;
         }
-        pathPoints.push_back(Vector3(pos[0], pos[1], pos[2]).ToWoW());
+        PathFinder::pathPoints.push_back(Vector3(pos[0], pos[1], pos[2]).ToWoW());
     }
+ 
 
     return true;
 }

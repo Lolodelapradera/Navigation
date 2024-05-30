@@ -19,6 +19,7 @@ public:
     static bool ApplyCircleBlacklistToPolys(dtNavMeshQuery* meshQuery, const dtNavMesh* navmesh, dtQueryFilter query, Marker Options);
 	dtStatus DistanceToWall(float* pos, float* Hitpos, float* distance);
 	bool ModifyPoint(float* Pos);
+	std::vector<Vector3> ChaikinCurve(const std::vector<Vector3>& points, int iterations);
 
 
 private:

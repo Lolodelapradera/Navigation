@@ -31,4 +31,16 @@ public:
 	float squaredLength() const;
 
 	
+
+
+	Vector3 operator/(float scalar) const {
+		return Vector3(X / scalar, Y / scalar, Z / scalar);
+	}
+
+	friend Vector3 operator*(float scalar, const Vector3& vec) {
+		return Vector3(vec.X * scalar, vec.Y * scalar, vec.Z * scalar);
+	}
+
+
+	
 };

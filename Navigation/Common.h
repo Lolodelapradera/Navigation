@@ -42,3 +42,4 @@ static void SmoothPath(const Vector3* input, int inputSize, Vector3* output, int
 
     InsertVector3(output, *outputSize, input, inputSize - 1);
 }
+

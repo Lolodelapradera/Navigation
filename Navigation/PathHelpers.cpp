@@ -214,3 +214,34 @@ bool PathFinder::ModifyPoint(float* SearchPoint)
 }
 
 
+std::vector<Vector3> PathFinder::ChaikinCurve(const std::vector<Vector3>& points, int iterations)
+{
+    std::vector<Vector3> result = points;
+
+    for (int it = 0; it < iterations; ++it) {
+        std::vector<Vector3> newPoints;
+
+        for (size_t i = 0; i < result.size() - 1; ++i)
+        {
+            Vector3 p0 = result[i];
+            Vector3 p1 = result[i + 1];
+
+            Vector3 Q = p0 + 0.75f * (p1 - p0);
+            Vector3 R = p0 + 0.25f * (p1 - p0);
+
+            newPoints.push_back(R);
+            newPoints.push_back(Q);
+        }
+
+        // Include the last point to close the curve if necessary
+        if (!result.empty())
+        {
+            newPoints.push_back(result.back());
+        }
+
+        result = std::move(newPoints);
+    }
+
+    return result;
+}
+
